@@ -9,23 +9,41 @@ import {
 } from "react-native";
 import { CheckBox } from "react-native-elements";
 import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Screen01() {
   const [isChecked, setIsChecked] = useState(false);
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const navigation = useNavigation();
+
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
 
   const handleSignUp = async () => {
-    const user = { name, password };
-
     try {
       const response = await axios.post("http://localhost:3000/account", user);
       const userCreated = response.data;
 
       console.log("User created:", userCreated);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleLogIn = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/account");
+      const userData = response.data;
+      console.log("Data:", userData);
+      const foundUser = userData.find(
+        (user) => user.name === name && user.password === password
+      );
+
+      if (foundUser) {
+        navigation.navigate("Screen02");
+      }
     } catch (error) {
       console.error(error);
     }
@@ -70,9 +88,9 @@ export default function Screen01() {
             Sign Up
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleLogIn}>
           <Text style={{ fontSize: 18, fontWeight: "bold", color: "#fff" }}>
-            Sign In
+            Log in
           </Text>
         </TouchableOpacity>
       </View>
