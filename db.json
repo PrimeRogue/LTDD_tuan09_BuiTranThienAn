@@ -35,5 +35,56 @@
       "password": "d",
       "id": 7
     }
+  ],
+  "notes": [
+    {
+      "id": 1,
+      "title": "Complete Project Proposal",
+      "content": "Write and submit the project proposal before the deadline.",
+      "priority": "first",
+      "date": "13-11-2023"
+    },
+    {
+      "id": 2,
+      "title": "Prepare for Meeting",
+      "content": "Gather necessary documents and information for the upcoming meeting.",
+      "priority": "second",
+      "date": "14-11-2023"
+    },
+    {
+      "id": 3,
+      "title": "Exercise",
+      "content": "Go for a 30-minute jog in the morning.",
+      "priority": "other",
+      "date": "14-11-2023"
+    },
+    {
+      "id": 4,
+      "title": "Read Chapter 5",
+      "content": "Read and summarize Chapter 5 of the assigned book.",
+      "priority": "other",
+      "date": "12-11-2023"
+    },
+    {
+      "id": 5,
+      "title": "Reply to Emails",
+      "content": "Respond to important emails in the inbox.",
+      "priority": "second",
+      "date": "14-11-2023"
+    },
+    {
+      "id": 6,
+      "title": "Grocery Shopping",
+      "content": "Buy groceries for the week.",
+      "priority": "other",
+      "date": "15-11-2023"
+    },
+    {
+      "id": 7,
+      "title": "Call Mom",
+      "content": "Make a quick call to mom to check in.",
+      "priority": "first",
+      "date": "14-11-2023"
+    }
   ]
 }

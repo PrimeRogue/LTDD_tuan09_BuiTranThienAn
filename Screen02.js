@@ -8,12 +8,112 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { CheckBox } from "react-native-elements";
+import { RadioButton } from "react-native-paper";
+
 import axios from "axios";
 
 export default function Screen01() {
+  const [checked, setChecked] = useState("first");
+  const [notes, setNotes] = useState([]);
+  const getNotes = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/notes");
+      setNotes(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  getNotes();
   return (
     <View style={styles.container}>
-      <Text>SC2</Text>
+      <View style={styles.priority}>
+        <Text style={{ fontSize: 20, fontWeight: "bold", color: "black" }}>
+          Priority
+        </Text>
+        <TouchableOpacity onPress={() => setChecked("first")}>
+          <View style={[styles.priorityItem, { borderColor: "red" }]}>
+            <RadioButton
+              value="first"
+              status={checked === "first" ? "checked" : "unchecked"}
+            />
+            <Text>First</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setChecked("second")}>
+          <View style={styles.priorityItem}>
+            <RadioButton
+              value="second"
+              status={checked === "second" ? "checked" : "unchecked"}
+            />
+            <Text>Second</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setChecked("other")}>
+          <View style={[styles.priorityItem, { borderColor: "green" }]}>
+            <RadioButton
+              value="other"
+              status={checked === "other" ? "checked" : "unchecked"}
+            />
+            <Text>Other</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.noteContainer}>
+        {notes.map((item, index) => (
+          <TouchableOpacity>
+            <View style={styles.note}>
+              <View
+                style={[
+                  styles.topNote,
+                  {
+                    backgroundColor:
+                      item.priority === "first"
+                        ? "red"
+                        : item.priority === "second"
+                        ? "orange"
+                        : "green",
+                  },
+                ]}
+              >
+                <Text
+                  style={{ fontSize: 25, fontWeight: "bold", color: "black" }}
+                >
+                  {item.title}
+                </Text>
+                <Image
+                  source={require("./assets/delete.png")}
+                  style={{
+                    width: 30,
+                    height: 30,
+                  }}
+                ></Image>
+              </View>
+              <View style={styles.contentNote}>
+                <Text style={{ fontSize: 15, color: "#565656" }}>
+                  {item.content}
+                </Text>
+
+                <View
+                  style={{
+                    width: "100%",
+                    height: 1,
+                    backgroundColor: "#565656",
+                  }}
+                ></View>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    color: "#565656",
+                    fontStyle: "italic",
+                  }}
+                >
+                  {item.date}
+                </Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        ))}
+      </View>
     </View>
   );
 }
@@ -23,10 +123,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     padding: 20,
     flexDirection: "column",
     gap: 20,
+  },
+
+  noteContainer: {
+    width: "100%",
+    justifyContent: "center",
+    gap: 10,
   },
   button: {
     alignItems: "center",
@@ -93,5 +199,39 @@ const styles = StyleSheet.create({
     backgroundColor: "#f69697",
     borderRadius: 10,
     borderColor: "#f69697",
+  },
+
+  note: {
+    width: "100%",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "orange",
+  },
+  topNote: {
+    backgroundColor: "orange",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexDirection: "row",
+    padding: 10,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  contentNote: {
+    padding: 10,
+    gap: 5,
+  },
+  priority: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  priorityItem: {
+    flexDirection: "row",
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: "orange",
+    alignItems: "center",
+    paddingRight: 10,
   },
 });
