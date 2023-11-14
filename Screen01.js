@@ -23,7 +23,10 @@ export default function Screen01() {
 
   const handleSignUp = async () => {
     try {
-      const response = await axios.post("http://localhost:3000/account", user);
+      const response = await axios.post("http://localhost:3000/account", {
+        name,
+        password,
+      });
       const userCreated = response.data;
 
       console.log("User created:", userCreated);
