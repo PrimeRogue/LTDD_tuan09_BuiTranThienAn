@@ -12,7 +12,7 @@ import { RadioButton } from "react-native-paper";
 
 import axios from "axios";
 
-export default function Screen03({ navigation }) {
+export default function Screen03({ route }) {
   const [checked, setChecked] = useState("first");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -43,7 +43,7 @@ export default function Screen03({ navigation }) {
     <View style={styles.container}>
       <View style={styles.priority}>
         <Text style={{ fontSize: 20, fontWeight: "bold", color: "black" }}>
-          Add New Note
+          {route.params.titleHeader}
         </Text>
         <TouchableOpacity
           onPress={() => {
@@ -104,13 +104,15 @@ export default function Screen03({ navigation }) {
       <TextInput
         placeholder="Enter title"
         style={styles.titleInput}
+        value={route.params.title !== undefined ? route.params.title : title}
         onChangeText={(text) => setTitle(text)}
       />
       <TextInput
         multiline={true}
         numberOfLines={10} // you can adjust the number of lines as needed
-        // onChangeText={(inputText) => setText(inputText)}
-        // value={text}
+        value={
+          route.params.content !== undefined ? route.params.content : content
+        }
         placeholder="Type here..."
         style={styles.contentInput}
         onChangeText={(text) => setContent(text)}

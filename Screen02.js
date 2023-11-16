@@ -15,6 +15,7 @@ import axios from "axios";
 export default function Screen02({ navigation }) {
   const [checked, setChecked] = useState("first");
   const [notes, setNotes] = useState([]);
+  var titleHeader = "";
   const getNotes = async () => {
     try {
       const response = await axios.get("http://localhost:3000/notes");
@@ -24,6 +25,21 @@ export default function Screen02({ navigation }) {
     }
   };
   getNotes();
+
+  const handleUpdateNote = (item) => {
+    const title = item.title;
+    const content = item.content;
+    const date = item.date;
+    titleHeader = "Update Note";
+
+    navigation.navigate("Screen03", {
+      titleHeader,
+      checked,
+      title,
+      content,
+      date,
+    });
+  };
   return (
     <View style={styles.container}>
       <View style={styles.priority}>
@@ -62,7 +78,7 @@ export default function Screen02({ navigation }) {
         style={styles.addNoteButton}
         onPress={() => {
           console.log("a");
-          navigation.navigate("Screen03");
+          navigation.navigate("Screen03", { titleHeader: "Add New Note" });
         }}
       >
         <Text style={{ fontSize: 35, fontWeight: "bold", color: "green" }}>
@@ -71,7 +87,11 @@ export default function Screen02({ navigation }) {
       </TouchableOpacity>
       <View style={styles.noteContainer}>
         {notes.map((item, index) => (
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              handleUpdateNote(item);
+            }}
+          >
             <View style={styles.note}>
               <View
                 style={[
