@@ -40,6 +40,17 @@ export default function Screen02({ navigation }) {
       date,
     });
   };
+
+  const handleDeleteNote = async (item) => {
+    try {
+      const response = await axios.delete(
+        "http://localhost:3000/notes/" + item.id
+      );
+      console.log("Item deleted successfully:", response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={styles.priority}>
@@ -111,13 +122,19 @@ export default function Screen02({ navigation }) {
                 >
                   {item.title}
                 </Text>
-                <Image
-                  source={require("./assets/delete.png")}
-                  style={{
-                    width: 30,
-                    height: 30,
+                <TouchableOpacity
+                  onPress={() => {
+                    handleDeleteNote(item);
                   }}
-                ></Image>
+                >
+                  <Image
+                    source={require("./assets/delete.png")}
+                    style={{
+                      width: 30,
+                      height: 30,
+                    }}
+                  ></Image>
+                </TouchableOpacity>
               </View>
               <View style={styles.contentNote}>
                 <Text style={{ fontSize: 15, color: "#565656" }}>
