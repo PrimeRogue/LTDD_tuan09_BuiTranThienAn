@@ -12,20 +12,53 @@ import { RadioButton } from "react-native-paper";
 
 import axios from "axios";
 
-export default function Screen02({ navigation }) {
+export default function Screen03({ navigation }) {
   const [checked, setChecked] = useState("first");
-  const [notes, setNotes] = useState([]);
-  const getNotes = async () => {
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const currentDate = new Date();
+  const handleAddNewNote = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/notes");
-      setNotes(response.data);
+      const response = await axios.post("http://localhost:3000/notes", {
+        title,
+        content,
+        priority: checked,
+        date,
+      });
+      const newNote = response.data;
+      navigation.goBack();
+
+      console.log("New note:", newNote);
     } catch (error) {
       console.error(error);
     }
   };
-  getNotes();
+  const date =
+    currentDate.getDay() +
+    "-" +
+    currentDate.getMonth() +
+    "-" +
+    currentDate.getFullYear();
   return (
     <View style={styles.container}>
+      <View style={styles.priority}>
+        <Text style={{ fontSize: 20, fontWeight: "bold", color: "black" }}>
+          Add New Note
+        </Text>
+        <TouchableOpacity
+          onPress={() => {
+            handleAddNewNote();
+          }}
+        >
+          <Image
+            source={require("./assets/save.png")}
+            style={{
+              width: 30,
+              height: 30,
+            }}
+          ></Image>
+        </TouchableOpacity>
+      </View>
       <View style={styles.priority}>
         <Text style={{ fontSize: 20, fontWeight: "bold", color: "black" }}>
           Priority
@@ -58,73 +91,30 @@ export default function Screen02({ navigation }) {
           </View>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        style={styles.addNoteButton}
-        onPress={() => {
-          console.log("a");
-          navigation.navigate("Screen03");
+      <Text
+        style={{
+          fontSize: 20,
+          fontStyle: "italic",
+          alignSelf: "flex-end",
+          color: "#4D4D4D",
         }}
       >
-        <Text style={{ fontSize: 35, fontWeight: "bold", color: "green" }}>
-          +
-        </Text>
-      </TouchableOpacity>
-      <View style={styles.noteContainer}>
-        {notes.map((item, index) => (
-          <TouchableOpacity>
-            <View style={styles.note}>
-              <View
-                style={[
-                  styles.topNote,
-                  {
-                    backgroundColor:
-                      item.priority === "first"
-                        ? "red"
-                        : item.priority === "second"
-                        ? "orange"
-                        : "green",
-                  },
-                ]}
-              >
-                <Text
-                  style={{ fontSize: 25, fontWeight: "bold", color: "black" }}
-                >
-                  {item.title}
-                </Text>
-                <Image
-                  source={require("./assets/delete.png")}
-                  style={{
-                    width: 30,
-                    height: 30,
-                  }}
-                ></Image>
-              </View>
-              <View style={styles.contentNote}>
-                <Text style={{ fontSize: 15, color: "#565656" }}>
-                  {item.content}
-                </Text>
-
-                <View
-                  style={{
-                    width: "100%",
-                    height: 1,
-                    backgroundColor: "#565656",
-                  }}
-                ></View>
-                <Text
-                  style={{
-                    fontSize: 15,
-                    color: "#565656",
-                    fontStyle: "italic",
-                  }}
-                >
-                  {item.date}
-                </Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </View>
+        {date}
+      </Text>
+      <TextInput
+        placeholder="Enter title"
+        style={styles.titleInput}
+        onChangeText={(text) => setTitle(text)}
+      />
+      <TextInput
+        multiline={true}
+        numberOfLines={10} // you can adjust the number of lines as needed
+        // onChangeText={(inputText) => setText(inputText)}
+        // value={text}
+        placeholder="Type here..."
+        style={styles.contentInput}
+        onChangeText={(text) => setContent(text)}
+      />
     </View>
   );
 }
@@ -253,5 +243,21 @@ const styles = StyleSheet.create({
     borderColor: "green",
     justifyContent: "center",
     alignItems: "center",
+  },
+  titleInput: {
+    width: "100%",
+    padding: 10,
+    fontSize: 20,
+    borderColor: "#eee",
+    borderWidth: 1,
+    color: "#4D4D4D",
+  },
+  contentInput: {
+    width: "100%",
+    padding: 10,
+    fontSize: 20,
+    borderColor: "#eee",
+    borderWidth: 1,
+    color: "#4D4D4D",
   },
 });

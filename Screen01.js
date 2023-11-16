@@ -45,7 +45,7 @@ export default function Screen01() {
       );
 
       if (foundUser) {
-        navigation.navigate("Screen02");
+        navigation.navigate("Screen02", { navigation });
       }
     } catch (error) {
       console.error(error);
